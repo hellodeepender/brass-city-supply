@@ -9,14 +9,22 @@ export default function Footer() {
           <div className="col-span-1 md:col-span-2">
             <h3 className="text-xl font-bold mb-4">Brass City Supply</h3>
             <p className="text-gray-300 mb-4">
-              Premium wholesale metalware manufacturer based in Moradabad, India —
+              Premium wholesale metalware sourced from Moradabad, India —
               the world's Brass City. Serving US wholesale buyers since 2021.
             </p>
-            <div className="flex items-center space-x-2 text-sm text-gray-400">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-              </svg>
-              <span>Moradabad, Uttar Pradesh, India</span>
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2 text-sm text-gray-400">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                </svg>
+                <span>Tampa, FL 33614</span>
+              </div>
+              <div className="flex items-center space-x-2 text-sm text-gray-400">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                </svg>
+                <a href="tel:+17473561110" className="hover:text-brass-300 transition-colors">(747) 356-1110</a>
+              </div>
             </div>
           </div>
 
@@ -56,11 +64,13 @@ export default function Footer() {
                   Request a Quote
                 </Link>
               </li>
-              <li className="text-sm text-gray-400">
-                Worldwide Export Available
+              <li>
+                <a href="tel:+17473561110" className="text-sm text-gray-400 hover:text-brass-300 transition-colors">
+                  (747) 356-1110
+                </a>
               </li>
               <li className="text-sm text-gray-400">
-                Custom Orders Welcome
+                Worldwide Export Available
               </li>
             </ul>
           </div>
