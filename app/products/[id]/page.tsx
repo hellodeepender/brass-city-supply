@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getProducts, getProductById } from '@/lib/products';
 import { notFound } from 'next/navigation';
+import ProductImage from '@/components/ProductImage';
 
 export async function generateStaticParams() {
   const products = await getProducts();
@@ -47,7 +48,7 @@ export default async function ProductDetailPage({
           {/* Image */}
           <div>
             {product.image_url ? (
-              <img
+              <ProductImage
                 src={product.image_url}
                 alt={product.name}
                 className="w-full h-96 lg:h-[500px] object-cover rounded-lg"

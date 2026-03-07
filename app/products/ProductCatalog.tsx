@@ -61,6 +61,7 @@ export default function ProductCatalog({
                   src={product.image_url}
                   alt={product.name}
                   className="w-full h-56 object-cover"
+                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
                 />
               ) : (
                 <div className="w-full h-56 bg-gradient-to-br from-brass-100 to-brass-300 flex items-center justify-center">

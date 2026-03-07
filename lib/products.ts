@@ -1,6 +1,5 @@
-// Replace this URL with your real Google Sheets CSV export URL
-// Format: https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&gid=0
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/export?format=csv&gid=0';
+import { client } from '@/sanity/client';
+import { urlFor } from '@/sanity/image';
 
 export interface Product {
   id: string;
@@ -15,6 +14,24 @@ export interface Product {
   image_url: string;
   status: string;
   description: string;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapSanityProduct(doc: any): Product {
+  return {
+    id: doc.id || '',
+    name: doc.name || '',
+    category: doc.category || '',
+    material: doc.material || '',
+    dimensions: doc.dimensions || '',
+    capacity: doc.capacity || '',
+    moq: doc.moq || '',
+    stock: doc.stock ? String(doc.stock) : '',
+    wholesale_note: doc.wholesale_note || '',
+    image_url: doc.image ? urlFor(doc.image).width(800).url() : '',
+    status: doc.status || '',
+    description: doc.description || '',
+  };
 }
 
 const SEED_PRODUCTS: Product[] = [
@@ -174,76 +191,33 @@ const SEED_PRODUCTS: Product[] = [
   },
 ];
 
-function parseCSV(csv: string): Product[] {
-  const lines = csv.split('\n').filter((line) => line.trim());
-  if (lines.length < 2) return [];
-
-  const headers = lines[0].split(',').map((h) => h.trim().toLowerCase());
-
-  return lines.slice(1).map((line) => {
-    const values: string[] = [];
-    let current = '';
-    let inQuotes = false;
-
-    for (const char of line) {
-      if (char === '"') {
-        inQuotes = !inQuotes;
-      } else if (char === ',' && !inQuotes) {
-        values.push(current.trim());
-        current = '';
-      } else {
-        current += char;
-      }
-    }
-    values.push(current.trim());
-
-    const row: Record<string, string> = {};
-    headers.forEach((header, i) => {
-      row[header] = values[i] || '';
-    });
-
-    return {
-      id: row.id || '',
-      name: row.name || '',
-      category: row.category || '',
-      material: row.material || '',
-      dimensions: row.dimensions || '',
-      capacity: row.capacity || '',
-      moq: row.moq || '',
-      stock: row.stock || '',
-      wholesale_note: row.wholesale_note || '',
-      image_url: row.image_url || '',
-      status: row.status || '',
-      description: row.description || '',
-    };
-  });
-}
-
 export async function getProducts(): Promise<Product[]> {
-  // Try fetching from Google Sheets
-  if (!SHEET_URL.includes('YOUR_SHEET_ID')) {
-    try {
-      const res = await fetch(SHEET_URL, { next: { revalidate: 300 } });
-      if (res.ok) {
-        const csv = await res.text();
-        const products = parseCSV(csv);
-        const filtered = products.filter(
-          (p) => p.status === 'Active' || p.status === 'Coming Soon'
-        );
-        if (filtered.length > 0) return filtered;
-      }
-    } catch {
-      // Fall through to seed data
+  try {
+    const docs = await client.fetch(
+      `*[_type == "product" && status in ["Active", "Coming Soon"]] | order(_createdAt asc)`
+    );
+    if (docs && docs.length > 0) {
+      return docs.map(mapSanityProduct);
     }
+  } catch {
+    // Fall through to seed data
   }
 
-  // Fallback to seed data
   return SEED_PRODUCTS.filter(
     (p) => p.status === 'Active' || p.status === 'Coming Soon'
   );
 }
 
 export async function getProductById(id: string): Promise<Product | undefined> {
-  const products = await getProducts();
-  return products.find((p) => p.id === id);
+  try {
+    const doc = await client.fetch(
+      `*[_type == "product" && id == $id][0]`,
+      { id }
+    );
+    if (doc) return mapSanityProduct(doc);
+  } catch {
+    // Fall through to seed data
+  }
+
+  return SEED_PRODUCTS.find((p) => p.id === id);
 }
