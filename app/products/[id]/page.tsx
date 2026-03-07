@@ -4,6 +4,9 @@ import { getProducts, getProductById } from '@/lib/products';
 import { notFound } from 'next/navigation';
 import ProductImage from '@/components/ProductImage';
 
+export const revalidate = 60;
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
   const products = await getProducts();
   return products.map((p) => ({ id: p.id }));

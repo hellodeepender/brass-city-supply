@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { getProducts } from '@/lib/products';
 import ProductCatalog from './ProductCatalog';
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: 'Wholesale Metal Products | Brass City Supply',
   description: 'Browse our wholesale catalog of copper mugs, stainless bar tools, aluminum kitchenware, and custom metalware. Flexible MOQs for US buyers.',
