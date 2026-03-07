@@ -186,8 +186,8 @@ export default function ContactPage() {
                     <div>
                       <h4 className="font-semibold text-brass-300 mb-1">Location</h4>
                       <p className="text-gray-300 text-sm">
-                        Moradabad, Uttar Pradesh<br />
-                        India 244001
+                        Tampa, Florida<br />
+                        33614
                       </p>
                     </div>
                   </div>
