@@ -273,12 +273,12 @@ function ContactForm() {
                   <div>
                     <h4 className="font-semibold text-brass-300 mb-1">WhatsApp</h4>
                     <a
-                      href="https://wa.me/919760380050"
+                      href="https://wa.me/17473561110"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-gray-300 text-sm hover:text-brass-300 transition-colors"
                     >
-                      +91 97603 80050
+                      (747) 356-1110
                     </a>
                   </div>
                 </div>
