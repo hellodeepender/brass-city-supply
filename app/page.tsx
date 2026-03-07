@@ -1,34 +1,25 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { getProducts } from '@/lib/products';
 
 export const metadata: Metadata = {
   title: 'Brass City Supply | Wholesale Metalware Supplier from India',
   description: "US wholesale supplier of handcrafted brass, copper, aluminum and steel products. Sourced from Moradabad, India. MOQ from 50 units. Bar accessories, kitchenware, home decor.",
 };
 
-export default function Home() {
-  const categories = [
-    {
-      name: 'Bar & Beverage',
-      description: 'Shakers, muddlers, jiggers, barware, and serving pieces',
-      slug: 'bar-beverage',
-    },
-    {
-      name: 'Kitchen & Dining',
-      description: 'Cookware, serving bowls, utensils, and tableware',
-      slug: 'kitchen-dining',
-    },
-    {
-      name: 'Home D\u00e9cor',
-      description: 'Vases, planters, candle holders, and decorative accents',
-      slug: 'home-decor',
-    },
-    {
-      name: 'Custom/OEM',
-      description: 'Custom designs, private label, and made-to-order manufacturing',
-      slug: 'custom-oem',
-    },
-  ];
+export const revalidate = 60;
+
+export default async function Home() {
+  const allProducts = await getProducts();
+  const featuredProducts = allProducts.filter((p) => p.status === 'Active' && p.image_url).slice(0, 3);
+
+  const categoryDescriptions: Record<string, string> = {
+    'Kitchen & Dining': 'Storage containers, fruit baskets, utensils, and tableware',
+    'Bar & Beverage': 'Moscow mule mugs, shakers, jiggers, and barware',
+    'Memorial & Urns': 'Handcrafted brass cremation urns with custom engraving',
+  };
+
+  const categories = Array.from(new Set(allProducts.map((p) => p.category)));
 
   const trustBadges = [
     { icon: '\ud83c\udf0d', title: 'Worldwide Export', text: 'Shipping to USA & 50+ countries' },
@@ -92,8 +83,60 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Featured Products */}
+      {featuredProducts.length > 0 && (
+        <section className="py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl font-bold text-navy-900 mb-4">
+                Featured Products
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Handcrafted metalware from Moradabad, India
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {featuredProducts.map((product) => (
+                <Link
+                  key={product.id}
+                  href={`/products/${product.id}`}
+                  className="group bg-white border-2 border-gray-200 rounded-lg overflow-hidden hover:border-brass-500 hover:shadow-xl transition-all"
+                >
+                  <div className="bg-gray-50 p-4 flex items-center justify-center h-64">
+                    <img
+                      src={product.image_url}
+                      alt={product.name}
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <span className="inline-block bg-brass-100 text-brass-800 text-xs font-semibold px-2.5 py-1 rounded mb-2">
+                      {product.category}
+                    </span>
+                    <h3 className="text-lg font-bold text-navy-900 group-hover:text-brass-600 transition-colors mb-1">
+                      {product.name}
+                    </h3>
+                    <p className="text-sm text-brass-600 font-semibold">Wholesale pricing on request</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            <div className="text-center mt-8">
+              <Link
+                href="/products"
+                className="inline-block bg-navy-900 text-white px-8 py-3 rounded-lg font-semibold hover:bg-brass-500 hover:text-navy-900 transition-all"
+              >
+                View All Products
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Product Categories */}
-      <section className="py-20">
+      <section className="py-20 bg-gray-50 border-y border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-navy-900 mb-4">
@@ -104,21 +147,23 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {categories.map((category, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {categories.map((category) => (
               <div
-                key={index}
+                key={category}
                 className="group bg-white border-2 border-gray-200 rounded-lg p-8 hover:border-brass-500 hover:shadow-xl transition-all"
               >
-                <div className="bg-gradient-to-br from-brass-100 to-brass-200 h-48 rounded-lg mb-6 flex items-center justify-center">
+                <div className="bg-gradient-to-br from-brass-100 to-brass-200 h-40 rounded-lg mb-6 flex items-center justify-center">
                   <span className="text-brass-600 font-semibold text-sm uppercase tracking-wide">
-                    {category.name}
+                    {category}
                   </span>
                 </div>
                 <h3 className="text-2xl font-bold text-navy-900 mb-3 group-hover:text-brass-600 transition-colors">
-                  {category.name}
+                  {category}
                 </h3>
-                <p className="text-gray-600 mb-6">{category.description}</p>
+                <p className="text-gray-600 mb-6">
+                  {categoryDescriptions[category] || 'Premium handcrafted metalware for wholesale buyers'}
+                </p>
                 <Link
                   href="/products"
                   className="inline-block bg-navy-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-brass-500 hover:text-navy-900 transition-all"
@@ -132,7 +177,7 @@ export default function Home() {
       </section>
 
       {/* How It Works */}
-      <section className="bg-gray-50 py-16 border-y border-gray-200">
+      <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-navy-900 mb-4">
@@ -162,7 +207,7 @@ export default function Home() {
       </section>
 
       {/* Trust Section */}
-      <section className="py-16">
+      <section className="py-16 bg-gray-50 border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white border-2 border-gray-200 rounded-lg p-8 text-center">

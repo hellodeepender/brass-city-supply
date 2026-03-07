@@ -49,15 +49,15 @@ export default async function ProductDetailPage({
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Image */}
-          <div>
+          <div className="bg-gray-50 rounded-lg p-4 flex items-center justify-center min-h-[400px]">
             {product.image_url ? (
               <ProductImage
                 src={product.image_url}
                 alt={product.name}
-                className="w-full h-96 lg:h-[500px] object-cover rounded-lg"
+                className="w-full max-h-[600px] object-contain rounded-lg"
               />
             ) : (
-              <div className="w-full h-96 lg:h-[500px] bg-gradient-to-br from-brass-100 to-brass-300 rounded-lg flex items-center justify-center">
+              <div className="w-full min-h-[400px] bg-gradient-to-br from-brass-100 to-brass-300 rounded-lg flex items-center justify-center">
                 <span className="text-brass-700 font-bold text-xl uppercase tracking-wide text-center px-8">
                   {product.name}
                 </span>
