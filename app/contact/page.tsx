@@ -1,23 +1,18 @@
 'use client';
 
-export default function ContactPage() {
-  const productCategories = [
-    'Bar & Beverage',
-    'Kitchen & Dining',
-    'Home Décor',
-    'Custom/OEM',
-    'Multiple Categories',
-    'Not Sure Yet',
-  ];
+import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
-  const orderQuantities = [
-    '50-100 units',
-    '100-500 units',
-    '500-1,000 units',
-    '1,000-5,000 units',
-    '5,000+ units',
-    'Need consultation',
-  ];
+function ContactForm() {
+  const searchParams = useSearchParams();
+  const productParam = searchParams.get('product') || '';
+  const typeParam = searchParams.get('type') || '';
+
+  const requestTypeMap: Record<string, string> = {
+    sample: 'Request a Sample',
+    quote: 'Get a Wholesale Quote',
+  };
+  const defaultRequestType = requestTypeMap[typeParam] || '';
 
   return (
     <div className="py-16">
@@ -28,7 +23,7 @@ export default function ContactPage() {
             Request a Quote
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Tell us about your wholesale metalware needs and we'll get back to you
+            Tell us about your wholesale metalware needs and we&apos;ll get back to you
             within 24 hours with a detailed quote.
           </p>
         </div>
@@ -72,7 +67,7 @@ export default function ContactPage() {
                   />
                 </div>
 
-                {/* Email & Phone Grid */}
+                {/* Email & Phone */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="email" className="block text-sm font-semibold text-navy-900 mb-2">
@@ -87,7 +82,6 @@ export default function ContactPage() {
                       placeholder="john@company.com"
                     />
                   </div>
-
                   <div>
                     <label htmlFor="phone" className="block text-sm font-semibold text-navy-900 mb-2">
                       Phone Number
@@ -102,199 +96,231 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                {/* Product Interest */}
+                {/* Website */}
                 <div>
-                  <label htmlFor="product_interest" className="block text-sm font-semibold text-navy-900 mb-2">
-                    Product Interest *
+                  <label htmlFor="website" className="block text-sm font-semibold text-navy-900 mb-2">
+                    Website
                   </label>
-                  <select
-                    id="product_interest"
-                    name="product_interest"
-                    required
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 focus:outline-none transition-colors bg-white"
-                  >
-                    <option value="">Select a category...</option>
-                    {productCategories.map((category, index) => (
-                      <option key={index} value={category}>
-                        {category}
-                      </option>
-                    ))}
-                  </select>
+                  <input
+                    type="url"
+                    id="website"
+                    name="website"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 focus:outline-none transition-colors"
+                    placeholder="https://yourcompany.com"
+                  />
                 </div>
 
-                {/* Estimated Order Quantity */}
+                {/* Product of Interest */}
                 <div>
-                  <label htmlFor="order_quantity" className="block text-sm font-semibold text-navy-900 mb-2">
-                    Estimated Order Quantity *
+                  <label htmlFor="product_interest" className="block text-sm font-semibold text-navy-900 mb-2">
+                    Product of Interest
                   </label>
-                  <select
-                    id="order_quantity"
-                    name="order_quantity"
-                    required
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 focus:outline-none transition-colors bg-white"
-                  >
-                    <option value="">Select quantity range...</option>
-                    {orderQuantities.map((quantity, index) => (
-                      <option key={index} value={quantity}>
-                        {quantity}
-                      </option>
-                    ))}
-                  </select>
+                  <input
+                    type="text"
+                    id="product_interest"
+                    name="product_interest"
+                    defaultValue={productParam}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 focus:outline-none transition-colors"
+                    placeholder="e.g. Copper Moscow Mule Mug, Storage Containers..."
+                  />
+                </div>
+
+                {/* Request Type & Order Quantity */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="request_type" className="block text-sm font-semibold text-navy-900 mb-2">
+                      Request Type *
+                    </label>
+                    <select
+                      id="request_type"
+                      name="request_type"
+                      required
+                      defaultValue={defaultRequestType}
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 focus:outline-none transition-colors bg-white"
+                    >
+                      <option value="">Select type...</option>
+                      <option value="Request a Sample">Request a Sample</option>
+                      <option value="Get a Wholesale Quote">Get a Wholesale Quote</option>
+                      <option value="General Inquiry">General Inquiry</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="order_quantity" className="block text-sm font-semibold text-navy-900 mb-2">
+                      Estimated Order Quantity
+                    </label>
+                    <select
+                      id="order_quantity"
+                      name="order_quantity"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 focus:outline-none transition-colors bg-white"
+                    >
+                      <option value="">Select quantity...</option>
+                      <option value="1-10 samples">1-10 samples</option>
+                      <option value="50-100 units">50-100 units</option>
+                      <option value="100-500 units">100-500 units</option>
+                      <option value="500+ units">500+ units</option>
+                      <option value="Not sure yet">Not sure yet</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Buyer Type & How Did You Hear */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="buyer_type" className="block text-sm font-semibold text-navy-900 mb-2">
+                      Are you a
+                    </label>
+                    <select
+                      id="buyer_type"
+                      name="buyer_type"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 focus:outline-none transition-colors bg-white"
+                    >
+                      <option value="">Select...</option>
+                      <option value="Retailer">Retailer</option>
+                      <option value="Importer">Importer</option>
+                      <option value="Distributor">Distributor</option>
+                      <option value="Individual">Individual</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="referral_source" className="block text-sm font-semibold text-navy-900 mb-2">
+                      How did you hear about us?
+                    </label>
+                    <select
+                      id="referral_source"
+                      name="referral_source"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 focus:outline-none transition-colors bg-white"
+                    >
+                      <option value="">Select...</option>
+                      <option value="Google Search">Google Search</option>
+                      <option value="LinkedIn">LinkedIn</option>
+                      <option value="Trade Show">Trade Show</option>
+                      <option value="Referral">Referral</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
                 </div>
 
                 {/* Message */}
                 <div>
                   <label htmlFor="message" className="block text-sm font-semibold text-navy-900 mb-2">
-                    Additional Details
+                    Message / Additional Details
                   </label>
                   <textarea
                     id="message"
                     name="message"
-                    rows={6}
+                    rows={5}
                     className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 focus:outline-none transition-colors resize-none"
                     placeholder="Tell us more about your needs: specific products, customization requirements, timeline, shipping destination, etc."
                   ></textarea>
                 </div>
 
-                {/* Submit Button */}
+                {/* Submit */}
                 <button
                   type="submit"
                   className="w-full bg-brass-500 text-navy-900 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-brass-400 transition-all shadow-lg hover:shadow-xl"
                 >
-                  Submit Quote Request
+                  Submit Request
                 </button>
 
                 <p className="text-sm text-gray-500 text-center">
-                  We'll respond within 24 hours with pricing and availability
+                  We&apos;ll respond within 24 hours with pricing and availability
                 </p>
               </form>
             </div>
           </div>
 
-          {/* Contact Info Sidebar */}
+          {/* Sidebar */}
           <div className="lg:col-span-1">
             <div className="bg-navy-900 text-white rounded-lg p-8 sticky top-24">
               <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
 
               <div className="space-y-6">
                 {/* Location */}
-                <div>
-                  <div className="flex items-start space-x-3 mb-2">
-                    <svg className="w-6 h-6 text-brass-400 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                    </svg>
-                    <div>
-                      <h4 className="font-semibold text-brass-300 mb-1">Location</h4>
-                      <p className="text-gray-300 text-sm">
-                        Moradabad, Uttar Pradesh<br />
-                        India 244001
-                      </p>
-                    </div>
+                <div className="flex items-start space-x-3">
+                  <svg className="w-6 h-6 text-brass-400 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                  </svg>
+                  <div>
+                    <h4 className="font-semibold text-brass-300 mb-1">Location</h4>
+                    <p className="text-gray-300 text-sm">
+                      Moradabad, Uttar Pradesh<br />India 244001
+                    </p>
+                  </div>
+                </div>
+
+                {/* WhatsApp */}
+                <div className="flex items-start space-x-3">
+                  <svg className="w-6 h-6 text-brass-400 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                  </svg>
+                  <div>
+                    <h4 className="font-semibold text-brass-300 mb-1">WhatsApp</h4>
+                    <a
+                      href="https://wa.me/919760380050"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-300 text-sm hover:text-brass-300 transition-colors"
+                    >
+                      +91 97603 80050
+                    </a>
                   </div>
                 </div>
 
                 {/* Response Time */}
-                <div>
-                  <div className="flex items-start space-x-3 mb-2">
-                    <svg className="w-6 h-6 text-brass-400 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                    </svg>
-                    <div>
-                      <h4 className="font-semibold text-brass-300 mb-1">Response Time</h4>
-                      <p className="text-gray-300 text-sm">
-                        Within 24 hours<br />
-                        (Monday - Saturday)
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Working Hours */}
-                <div>
-                  <div className="flex items-start space-x-3 mb-2">
-                    <svg className="w-6 h-6 text-brass-400 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-                    </svg>
-                    <div>
-                      <h4 className="font-semibold text-brass-300 mb-1">Business Hours</h4>
-                      <p className="text-gray-300 text-sm">
-                        9:00 AM - 6:00 PM IST<br />
-                        Monday - Saturday
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Lead Time */}
-              <div>
-                <div className="flex items-start space-x-3 mb-2">
+                <div className="flex items-start space-x-3">
                   <svg className="w-6 h-6 text-brass-400 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 4a1 1 0 10-2 0v4a1 1 0 00.553.894l3 1.5a1 1 0 00.894-1.788L11 9.382V6z" clipRule="evenodd" />
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                  </svg>
+                  <div>
+                    <h4 className="font-semibold text-brass-300 mb-1">Response Time</h4>
+                    <p className="text-gray-300 text-sm">
+                      Within 24 hours<br />(Monday - Saturday)
+                    </p>
+                  </div>
+                </div>
+
+                {/* Lead Time */}
+                <div className="flex items-start space-x-3">
+                  <svg className="w-6 h-6 text-brass-400 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
                   </svg>
                   <div>
                     <h4 className="font-semibold text-brass-300 mb-1">Lead Time</h4>
                     <p className="text-gray-300 text-sm">
-                      Typical lead time: 8–12 weeks<br />
-                      from confirmed order
+                      Typical lead time: 8&ndash;12 weeks<br />from confirmed order
                     </p>
                   </div>
                 </div>
-              </div>
 
-              {/* Payment Terms */}
-              <div>
-                <div className="flex items-start space-x-3 mb-2">
+                {/* Payment Terms */}
+                <div className="flex items-start space-x-3">
                   <svg className="w-6 h-6 text-brass-400 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                   </svg>
                   <div>
                     <h4 className="font-semibold text-brass-300 mb-1">Payment Terms</h4>
                     <p className="text-gray-300 text-sm">
-                      We accept wire transfer,<br />
-                      PayPal, and Letter of Credit
+                      Wire transfer, PayPal,<br />and Letter of Credit
                     </p>
                   </div>
                 </div>
               </div>
 
-              {/* Divider */}
               <div className="border-t border-navy-700 my-8"></div>
 
               {/* What to Expect */}
               <div>
                 <h4 className="font-semibold text-brass-300 mb-4">What to Expect</h4>
                 <ul className="space-y-3 text-sm text-gray-300">
-                  <li className="flex items-start">
-                    <svg className="w-5 h-5 text-brass-400 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    Detailed pricing breakdown
-                  </li>
-                  <li className="flex items-start">
-                    <svg className="w-5 h-5 text-brass-400 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    Production timeline estimate
-                  </li>
-                  <li className="flex items-start">
-                    <svg className="w-5 h-5 text-brass-400 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    Shipping options & costs
-                  </li>
-                  <li className="flex items-start">
-                    <svg className="w-5 h-5 text-brass-400 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    Customization possibilities
-                  </li>
-                  <li className="flex items-start">
-                    <svg className="w-5 h-5 text-brass-400 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    Sample availability info
-                  </li>
+                  {['Detailed pricing breakdown', 'Production timeline estimate', 'Shipping options & costs', 'Customization possibilities', 'Sample availability info'].map((item) => (
+                    <li key={item} className="flex items-start">
+                      <svg className="w-5 h-5 text-brass-400 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      {item}
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -302,5 +328,13 @@ export default function ContactPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ContactPage() {
+  return (
+    <Suspense fallback={<div className="py-16 text-center text-gray-500">Loading...</div>}>
+      <ContactForm />
+    </Suspense>
   );
 }
