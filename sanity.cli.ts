@@ -1,4 +1,4 @@
-import { defineCliConfig } from 'sanity/cli';
+import { defineCliConfig } from 'sanity/cli'
 
 export default defineCliConfig({
   api: {
@@ -6,4 +6,7 @@ export default defineCliConfig({
     dataset: 'production',
   },
   studioHost: 'brass-city-supply',
-});
+  deployment: {
+    appId: 'xd1fy20f055yaic8n118hxn5',
+  },
+})
