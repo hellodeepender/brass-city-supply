@@ -1,4 +1,10 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Brass City Supply | Wholesale Metalware Supplier from India',
+  description: "US wholesale supplier of handcrafted brass, copper, aluminum and steel products. Sourced from Moradabad, India. MOQ from 50 units. Bar accessories, kitchenware, home decor.",
+};
 
 export default function Home() {
   const categories = [

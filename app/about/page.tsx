@@ -1,4 +1,10 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'About Us | Brass City Supply - Moradabad Manufacturers',
+  description: "Learn about Brass City Supply — your direct link to Moradabad, India's world-famous metalware manufacturing hub. Est. 2021, 50+ skilled craftsmen.",
+};
 
 export default function AboutPage() {
   const capabilities = [

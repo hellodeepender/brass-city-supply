@@ -1,4 +1,10 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Wholesale Metal Products | Brass City Supply',
+  description: 'Browse our wholesale catalog of copper mugs, stainless bar tools, aluminum kitchenware, and custom metalware. Flexible MOQs for US buyers.',
+};
 
 export default function ProductsPage() {
   const productCategories = [
