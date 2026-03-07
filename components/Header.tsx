@@ -17,7 +17,7 @@ export default function Header() {
             </div>
             <div>
               <h1 className="text-xl font-bold tracking-tight">Brass City Supply</h1>
-              <p className="text-xs text-brass-300">Premium Metalware Since 2017</p>
+              <p className="text-xs text-brass-300">Premium Metalware Since 2021</p>
             </div>
           </Link>
 

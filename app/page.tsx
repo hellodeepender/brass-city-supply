@@ -28,7 +28,7 @@ export default function Home() {
     { icon: '🌍', title: 'Worldwide Export', text: 'Shipping to USA & 50+ countries' },
     { icon: '📦', title: 'Flexible MOQ', text: 'Minimum orders starting at 50 units' },
     { icon: '⚙️', title: 'Custom Orders', text: 'On-demand manufacturing & private label' },
-    { icon: '✓', title: 'Quality Assured', text: 'ISO-certified production facility' },
+    { icon: '✓', title: 'Quality Assured', text: 'Export-Ready & Globally Shipped' },
   ];
 
   return (

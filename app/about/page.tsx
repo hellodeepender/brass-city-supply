@@ -21,7 +21,7 @@ export default function AboutPage() {
   ];
 
   const certifications = [
-    { icon: '🏭', label: 'ISO Certified Facility' },
+    { icon: '🏭', label: 'Export-Ready & Globally Shipped' },
     { icon: '🌍', label: 'Worldwide Export License' },
     { icon: '✓', label: 'Quality Assurance System' },
     { icon: '📦', label: 'Secure Packaging Standards' },
@@ -81,7 +81,7 @@ export default function AboutPage() {
           <h2 className="text-3xl font-bold mb-8 text-center">Our Credentials</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="text-4xl font-bold text-brass-400 mb-2">2017</div>
+              <div className="text-4xl font-bold text-brass-400 mb-2">2021</div>
               <div className="text-gray-300">Established</div>
             </div>
             <div className="text-center">

@@ -10,7 +10,7 @@ export default function Footer() {
             <h3 className="text-xl font-bold mb-4">Brass City Supply</h3>
             <p className="text-gray-300 mb-4">
               Premium wholesale metalware manufacturer based in Moradabad, India —
-              the world's Brass City. Serving US wholesale buyers since 2017.
+              the world's Brass City. Serving US wholesale buyers since 2021.
             </p>
             <div className="flex items-center space-x-2 text-sm text-gray-400">
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">

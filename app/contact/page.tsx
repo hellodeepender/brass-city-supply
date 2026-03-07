@@ -226,6 +226,38 @@ export default function ContactPage() {
                 </div>
               </div>
 
+              {/* Lead Time */}
+              <div>
+                <div className="flex items-start space-x-3 mb-2">
+                  <svg className="w-6 h-6 text-brass-400 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 4a1 1 0 10-2 0v4a1 1 0 00.553.894l3 1.5a1 1 0 00.894-1.788L11 9.382V6z" clipRule="evenodd" />
+                  </svg>
+                  <div>
+                    <h4 className="font-semibold text-brass-300 mb-1">Lead Time</h4>
+                    <p className="text-gray-300 text-sm">
+                      Typical lead time: 8–12 weeks<br />
+                      from confirmed order
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Payment Terms */}
+              <div>
+                <div className="flex items-start space-x-3 mb-2">
+                  <svg className="w-6 h-6 text-brass-400 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                  </svg>
+                  <div>
+                    <h4 className="font-semibold text-brass-300 mb-1">Payment Terms</h4>
+                    <p className="text-gray-300 text-sm">
+                      We accept wire transfer,<br />
+                      PayPal, and Letter of Credit
+                    </p>
+                  </div>
+                </div>
+              </div>
+
               {/* Divider */}
               <div className="border-t border-navy-700 my-8"></div>
 
