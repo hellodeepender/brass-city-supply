@@ -38,7 +38,7 @@ export default function ContactPage() {
           <div className="lg:col-span-2">
             <div className="bg-white border-2 border-gray-200 rounded-lg p-8">
               <form
-                action="https://formspree.io/f/YOUR_FORM_ID"
+                action="https://formspree.io/f/xwvrkgap"
                 method="POST"
                 className="space-y-6"
               >
