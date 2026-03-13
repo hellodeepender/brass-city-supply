@@ -3,6 +3,28 @@ import Script from "next/script";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import LiveChat from "@/components/LiveChat";
+
+// GA4 Tracking ID — fallback: G-208F0BFC1E
+const gaId = process.env.NEXT_PUBLIC_GA_ID;
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Brass City Supply",
+  "url": "https://brasscitysupply.com",
+  "logo": "https://brasscitysupply.com/favicon.ico",
+  "description": "Premium wholesale metalware sourced from Moradabad, India",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Tampa",
+    "addressRegion": "FL",
+    "postalCode": "33614",
+    "addressCountry": "US"
+  },
+  "telephone": "+1-747-356-1110",
+  "sameAs": []
+};
 
 export const metadata: Metadata = {
   title: "Brass City Supply - Premium Wholesale Metalware from Moradabad, India",
@@ -24,26 +46,35 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex flex-col min-h-screen bg-white">
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-208F0BFC1E"
-          strategy="afterInteractive"
+        {gaId && (
+          <Script
+            src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+            strategy="afterInteractive"
+          />
+        )}
+        {gaId && (
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${gaId}');
+            `}
+          </Script>
+        )}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-208F0BFC1E');
-          `}
-        </Script>
         <Header />
         <main className="flex-grow">
           {children}
         </main>
         <Footer />
+        <LiveChat />
         {/* WhatsApp Floating Button */}
         <a
-          href="https://wa.me/17473561110"
+          href="https://wa.me/17473561110?text=Hi%2C%20I'm%20interested%20in%20wholesale%20metalware%20from%20Brass%20City%20Supply.%20Can%20you%20share%20more%20details%3F"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Chat on WhatsApp"

@@ -206,6 +206,63 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Testimonials Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold text-navy-900 mb-4">
+              What Our Buyers Say
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[
+              {
+                quote: "Brass City Supply has been our go-to partner for premium metalware. Their quality is unmatched and the MOQs are perfect for our boutique chain.",
+                name: "Sarah Mitchell",
+                title: "Owner, The Copper House",
+                location: "Austin, TX",
+              },
+              {
+                quote: "Reliable shipping, beautiful craftsmanship. We\u2019ve been importing from them for 2 years and every order exceeds expectations.",
+                name: "James O\u2019Brien",
+                title: "Purchasing Director, Atlantic Home Goods",
+                location: "New York, NY",
+              },
+              {
+                quote: "The sample process was seamless. We received our samples within 2 weeks and placed our first bulk order immediately.",
+                name: "Priya Sharma",
+                title: "Founder, Luxe Imports",
+                location: "Toronto, Canada",
+              },
+              {
+                quote: "Their team is incredibly responsive and the product range keeps growing. A truly professional wholesale partner.",
+                name: "David Chen",
+                title: "VP of Sourcing, Pacific Trading Co.",
+                location: "Los Angeles, CA",
+              },
+            ].map((testimonial, index) => (
+              <div
+                key={index}
+                className="bg-brass-50 border border-brass-200 rounded-lg p-8"
+              >
+                <div className="text-brass-500 text-lg mb-3">
+                  {'★★★★★'}
+                </div>
+                <p className="italic text-gray-700 mb-6">
+                  &ldquo;{testimonial.quote}&rdquo;
+                </p>
+                <div>
+                  <p className="font-bold text-navy-900">{testimonial.name}</p>
+                  <p className="text-sm text-gray-500">
+                    {testimonial.title} ({testimonial.location})
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Trust Section */}
       <section className="py-16 bg-gray-50 border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

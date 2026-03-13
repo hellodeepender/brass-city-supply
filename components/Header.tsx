@@ -32,6 +32,9 @@ export default function Header() {
             <Link href="/how-it-works" className="text-gray-200 hover:text-brass-300 transition-colors font-medium">
               How It Works
             </Link>
+            <Link href="/blog" className="text-gray-200 hover:text-brass-300 transition-colors font-medium">
+              Blog
+            </Link>
             <Link href="/about" className="text-gray-200 hover:text-brass-300 transition-colors font-medium">
               About
             </Link>
@@ -88,6 +91,13 @@ export default function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 How It Works
+              </Link>
+              <Link
+                href="/blog"
+                className="text-gray-200 hover:text-brass-300 transition-colors font-medium py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Blog
               </Link>
               <Link
                 href="/about"

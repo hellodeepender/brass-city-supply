@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import NewsletterSignup from './NewsletterSignup';
 
 export default function Footer() {
   return (
@@ -48,6 +49,16 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/blog" className="text-gray-300 hover:text-brass-300 transition-colors">
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <Link href="/catalog" className="text-gray-300 hover:text-brass-300 transition-colors">
+                  Download Catalog
+                </Link>
+              </li>
+              <li>
                 <Link href="/contact" className="text-gray-300 hover:text-brass-300 transition-colors">
                   Contact
                 </Link>
@@ -75,6 +86,8 @@ export default function Footer() {
             </ul>
           </div>
         </div>
+
+        <NewsletterSignup />
 
         <div className="border-t border-navy-700 mt-8 pt-8 text-center text-gray-400 text-sm flex flex-col sm:flex-row items-center justify-center gap-2">
           <p>&copy; 2025 Brass City Supply. All rights reserved.</p>

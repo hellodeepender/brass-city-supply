@@ -1,7 +1,19 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
+import { Suspense, useState, useCallback } from 'react';
+
+interface FormErrors {
+  name?: string;
+  company?: string;
+  email?: string;
+  phone?: string;
+}
+
+function validateEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
 
 function ContactForm() {
   const searchParams = useSearchParams();
@@ -13,6 +25,71 @@ function ContactForm() {
     quote: 'Get a Wholesale Quote',
   };
   const defaultRequestType = requestTypeMap[typeParam] || '';
+
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  const validateField = useCallback((name: string, value: string): string | undefined => {
+    switch (name) {
+      case 'name':
+        if (!value.trim()) return 'Full name is required';
+        return undefined;
+      case 'company':
+        if (!value.trim()) return 'Company name is required';
+        if (value.trim().length < 2) return 'Company name must be at least 2 characters';
+        return undefined;
+      case 'email':
+        if (!value.trim()) return 'Email address is required';
+        if (!validateEmail(value.trim())) return 'Please enter a valid email address';
+        return undefined;
+      case 'phone':
+        // Phone is optional, no error
+        return undefined;
+      default:
+        return undefined;
+    }
+  }, []);
+
+  const handleBlur = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setTouched(prev => ({ ...prev, [name]: true }));
+    const error = validateField(name, value);
+    setErrors(prev => ({ ...prev, [name]: error }));
+  }, [validateField]);
+
+  const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    const nameVal = (formData.get('name') as string) || '';
+    const companyVal = (formData.get('company') as string) || '';
+    const emailVal = (formData.get('email') as string) || '';
+    const phoneVal = (formData.get('phone') as string) || '';
+
+    const newErrors: FormErrors = {
+      name: validateField('name', nameVal),
+      company: validateField('company', companyVal),
+      email: validateField('email', emailVal),
+      phone: validateField('phone', phoneVal),
+    };
+
+    // Mark all validated fields as touched
+    setTouched({ name: true, company: true, email: true, phone: true });
+    setErrors(newErrors);
+
+    const hasErrors = Object.values(newErrors).some(err => err !== undefined);
+    if (hasErrors) {
+      e.preventDefault();
+    }
+    // If no errors, allow the default form submission to Formspree
+  }, [validateField]);
+
+  const renderError = (field: keyof FormErrors) => {
+    if (touched[field] && errors[field]) {
+      return <p className="mt-1 text-sm text-red-600">{errors[field]}</p>;
+    }
+    return null;
+  };
 
   return (
     <div className="py-16">
@@ -36,6 +113,8 @@ function ContactForm() {
                 action="https://formspree.io/f/xwvrkgap"
                 method="POST"
                 className="space-y-6"
+                onSubmit={handleSubmit}
+                noValidate
               >
                 {/* Name */}
                 <div>
@@ -47,9 +126,11 @@ function ContactForm() {
                     id="name"
                     name="name"
                     required
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 focus:outline-none transition-colors"
+                    onBlur={handleBlur}
+                    className={`w-full px-4 py-3 border-2 rounded-lg focus:border-brass-500 transition-colors ${touched.name && errors.name ? 'border-red-400' : 'border-gray-300'}`}
                     placeholder="John Smith"
                   />
+                  {renderError('name')}
                 </div>
 
                 {/* Company */}
@@ -62,9 +143,12 @@ function ContactForm() {
                     id="company"
                     name="company"
                     required
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 focus:outline-none transition-colors"
+                    minLength={2}
+                    onBlur={handleBlur}
+                    className={`w-full px-4 py-3 border-2 rounded-lg focus:border-brass-500 transition-colors ${touched.company && errors.company ? 'border-red-400' : 'border-gray-300'}`}
                     placeholder="Your Company LLC"
                   />
+                  {renderError('company')}
                 </div>
 
                 {/* Email & Phone */}
@@ -78,9 +162,11 @@ function ContactForm() {
                       id="email"
                       name="email"
                       required
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 focus:outline-none transition-colors"
+                      onBlur={handleBlur}
+                      className={`w-full px-4 py-3 border-2 rounded-lg focus:border-brass-500 transition-colors ${touched.email && errors.email ? 'border-red-400' : 'border-gray-300'}`}
                       placeholder="john@company.com"
                     />
+                    {renderError('email')}
                   </div>
                   <div>
                     <label htmlFor="phone" className="block text-sm font-semibold text-navy-900 mb-2">
@@ -90,9 +176,11 @@ function ContactForm() {
                       type="tel"
                       id="phone"
                       name="phone"
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 focus:outline-none transition-colors"
+                      onBlur={handleBlur}
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 transition-colors"
                       placeholder="+1 (555) 123-4567"
                     />
+                    <p className="mt-1 text-xs text-gray-400">Format: +1 (555) 123-4567</p>
                   </div>
                 </div>
 
@@ -105,7 +193,7 @@ function ContactForm() {
                     type="url"
                     id="website"
                     name="website"
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 transition-colors"
                     placeholder="https://yourcompany.com"
                   />
                 </div>
@@ -120,7 +208,7 @@ function ContactForm() {
                     id="product_interest"
                     name="product_interest"
                     defaultValue={productParam}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 transition-colors"
                     placeholder="e.g. Copper Moscow Mule Mug, Storage Containers..."
                   />
                 </div>
@@ -136,7 +224,7 @@ function ContactForm() {
                       name="request_type"
                       required
                       defaultValue={defaultRequestType}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 focus:outline-none transition-colors bg-white"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 transition-colors bg-white"
                     >
                       <option value="">Select type...</option>
                       <option value="Request a Sample">Request a Sample</option>
@@ -151,7 +239,7 @@ function ContactForm() {
                     <select
                       id="order_quantity"
                       name="order_quantity"
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 focus:outline-none transition-colors bg-white"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 transition-colors bg-white"
                     >
                       <option value="">Select quantity...</option>
                       <option value="1-10 samples">1-10 samples</option>
@@ -172,7 +260,7 @@ function ContactForm() {
                     <select
                       id="buyer_type"
                       name="buyer_type"
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 focus:outline-none transition-colors bg-white"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 transition-colors bg-white"
                     >
                       <option value="">Select...</option>
                       <option value="Retailer">Retailer</option>
@@ -189,7 +277,7 @@ function ContactForm() {
                     <select
                       id="referral_source"
                       name="referral_source"
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 focus:outline-none transition-colors bg-white"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 transition-colors bg-white"
                     >
                       <option value="">Select...</option>
                       <option value="Google Search">Google Search</option>
@@ -210,7 +298,7 @@ function ContactForm() {
                     id="message"
                     name="message"
                     rows={5}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 focus:outline-none transition-colors resize-none"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brass-500 transition-colors resize-none"
                     placeholder="Tell us more about your needs: specific products, customization requirements, timeline, shipping destination, etc."
                   ></textarea>
                 </div>

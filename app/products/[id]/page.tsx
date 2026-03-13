@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { getProducts, getProductById } from '@/lib/products';
 import { notFound } from 'next/navigation';
 import ProductImage from '@/components/ProductImage';
+import InternationalBadge from '@/components/InternationalBadge';
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -35,8 +36,29 @@ export default async function ProductDetailPage({
   const product = await getProductById(id);
   if (!product) notFound();
 
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.name,
+    "description": product.description,
+    ...(product.image_url ? { "image": product.image_url } : {}),
+    "brand": {
+      "@type": "Brand",
+      "name": "Brass City Supply"
+    },
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock"
+    }
+  };
+
   return (
     <div className="py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <nav className="flex items-center space-x-2 text-sm text-gray-500 mb-8">
@@ -137,8 +159,10 @@ export default async function ProductDetailPage({
               </Link>
             </div>
 
+            <InternationalBadge />
+
             {/* Note */}
-            <p className="text-sm text-gray-500 italic">
+            <p className="text-sm text-gray-500 italic mt-4">
               All products are handcrafted in Moradabad, India &mdash; the world&apos;s brass manufacturing capital
             </p>
           </div>
