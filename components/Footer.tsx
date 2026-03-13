@@ -77,7 +77,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-navy-700 mt-8 pt-8 text-center text-gray-400 text-sm flex flex-col sm:flex-row items-center justify-center gap-2">
-          <p>&copy; {new Date().getFullYear()} Brass City Supply. All rights reserved.</p>
+          <p>&copy; 2025 Brass City Supply. All rights reserved.</p>
           <span className="hidden sm:inline text-navy-700">|</span>
           <span className="text-xs text-gray-500">Made in Moradabad, India 🇮🇳</span>
         </div>
